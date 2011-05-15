@@ -30,12 +30,16 @@
 
 ;;; Setting Sample
 ;;
+;; mv rdefs.rb ~/bin/rdefs
+;;
 ;; (require 'anything-rdefs)
 ;; (add-hook 'ruby-mode-hook
 ;;           (lambda ()
 ;;             (define-key ruby-mode-map (kbd "C-@") 'anything-rdefs)))
 
 
+(require 'cl)
+(require 'anything-config)
 
 (defvar ar:recenter-height 10)
 
@@ -134,11 +138,9 @@
     (kill-all-local-variables)
     (buffer-disable-undo)
     (erase-buffer)
-
     (ruby-mode)
-    ;;todo linum-mode がない場合の処理
-    (linum-mode nil)
-
+    (when (fboundp 'linum-mode)
+      (linum-mode -1))
     (set (make-local-variable 'inhibit-read-only) t)
     (set (make-local-variable 'anything-last-sources-local) anything-sources)
     (set (make-local-variable 'anything-follow-mode) nil)
