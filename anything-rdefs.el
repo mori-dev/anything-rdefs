@@ -76,9 +76,10 @@
       (anything anything-c-source-rdefs))))
 
 (defun anything-c-rdefs-init ()
-  (let ((file-path (buffer-file-name)))
-                (with-current-buffer (anything-candidate-buffer 'global)
-                  (ar:execute-rdefs file-path))))
+  (when (anything-current-buffer-is-modified)
+    (let ((file-path (buffer-file-name)))
+      (with-current-buffer (anything-candidate-buffer 'global)
+        (ar:execute-rdefs file-path)))))
 
 (defun anything-c-rdefs-action (candidate)
   (ar:awhen (ar:substring-line-number candidate)
