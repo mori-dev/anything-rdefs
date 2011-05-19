@@ -42,21 +42,11 @@
 (require 'anything-config)
 
 (defvar ar:recenter-height 10)
-
-(unless (executable-find "rdefs")
-  (error "rdefs not found"))
-
 (defvar ar:command (executable-find "rdefs"))
-
 (defvar ar:buffer "*rdefs*")
-
-(defvar ar:current-line-overlay
-  (make-overlay (point) (point)))
-
+(defvar ar:current-line-overlay (make-overlay (point) (point)))
 (defvar ar:enable-auto-look-flag t)
-
 (defvar ar:push-mark-flag t)
-
 
 (defvar anything-c-source-rdefs
   '((name . "rdefs")
@@ -76,10 +66,9 @@
       (anything anything-c-source-rdefs))))
 
 (defun anything-c-rdefs-init ()
-  (when (anything-current-buffer-is-modified)
-    (let ((file-path (buffer-file-name)))
-      (with-current-buffer (anything-candidate-buffer 'global)
-        (ar:execute-rdefs file-path)))))
+  (let ((file-path (buffer-file-name)))
+    (with-current-buffer (anything-candidate-buffer 'global)
+      (ar:execute-rdefs file-path))))
 
 (defun anything-c-rdefs-action (candidate)
   (ar:awhen (ar:substring-line-number candidate)
