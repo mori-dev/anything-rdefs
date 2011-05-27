@@ -48,6 +48,19 @@
 (defvar ar:enable-auto-look-flag t)
 (defvar ar:push-mark-flag t)
 
+
+(defun ar:substring-line-number (s)
+  (when (string-match "\\([0-9]+\\):" s)
+    (match-string 1 s)))
+
+(defmacro ar:aif (test-form then-form &optional else-form)
+  `(let ((it ,test-form))
+     (if it ,then-form ,else-form)))
+
+(defmacro* ar:awhen (test-form &body body)
+  `(ar:aif ,test-form
+        (progn ,@body)))
+
 (defvar anything-c-source-rdefs
   '((name . "rdefs")
     (init . anything-c-rdefs-init)
@@ -142,21 +155,6 @@
     (setq mode-name "Anything"))
   (anything-initialize-overlays anything-buffer)
   (get-buffer anything-buffer))
-
-
-;; utility
-
-(defun ar:substring-line-number (s)
-  (when (string-match "\\([0-9]+\\):" s)
-    (match-string 1 s)))
-
-(defmacro ar:aif (test-form then-form &optional else-form)
-  `(let ((it ,test-form))
-     (if it ,then-form ,else-form)))
-
-(defmacro* ar:awhen (test-form &body body)
-  `(ar:aif ,test-form
-        (progn ,@body)))
 
 
 (provide 'anything-rdefs)
