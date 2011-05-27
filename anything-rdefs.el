@@ -56,6 +56,21 @@
     (persistent-action . ar:persistent-action)
     (cleanup . ar:clean-up)))
 
+;; utility
+;; macros should be defined before the first use for byte compile
+
+(defun ar:substring-line-number (s)
+  (when (string-match "\\([0-9]+\\):" s)
+    (match-string 1 s)))
+
+(defmacro ar:aif (test-form then-form &optional else-form)
+  `(let ((it ,test-form))
+     (if it ,then-form ,else-form)))
+
+(defmacro* ar:awhen (test-form &body body)
+  `(ar:aif ,test-form
+        (progn ,@body)))
+
 (defun anything-rdefs ()
   (interactive)
   (let ((anything-display-function 'ar:display-buffer)
@@ -142,21 +157,5 @@
     (setq mode-name "Anything"))
   (anything-initialize-overlays anything-buffer)
   (get-buffer anything-buffer))
-
-
-;; utility
-
-(defun ar:substring-line-number (s)
-  (when (string-match "\\([0-9]+\\):" s)
-    (match-string 1 s)))
-
-(defmacro ar:aif (test-form then-form &optional else-form)
-  `(let ((it ,test-form))
-     (if it ,then-form ,else-form)))
-
-(defmacro* ar:awhen (test-form &body body)
-  `(ar:aif ,test-form
-        (progn ,@body)))
-
 
 (provide 'anything-rdefs)
